@@ -52,6 +52,7 @@ impl Font {
         let units = f.units_per_em() as f32;
         let factor = font_size / units;
         let (glyph, outline) = self.outline(c)?;
+        println!("{:?}", outline);
         let advanced_x = glyph.advanced_x as f32 * factor;
         let mut width =
             (glyph.bbox.x_max as f32 * factor).ceil() - (glyph.bbox.x_min as f32 * factor).floor();

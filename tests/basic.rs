@@ -16,9 +16,9 @@ pub fn test_font_loading() -> Result<(), Error> {
 
 #[test]
 pub fn test_font_stroke_bitmap() -> Result<(), Error> {
-    let c = '默';
+    let c = '为';
     let mut buf = vec![];
-    let mut f = fs::File::open("examples/NotoSansCJKsc-Bold.otf")?;
+    let mut f = fs::File::open("examples/Alibaba-PuHuiTi-Bold.woff2")?;
     f.read_to_end(&mut buf)?;
 
     let mut fontkit = fontkit::FontKit::new();
@@ -41,7 +41,7 @@ pub fn test_font_stroke_bitmap() -> Result<(), Error> {
     });
 
     let bitmap = BitMap::create(width, height, bitmap).unwrap();
-    bitmap.save_as("./默.bmp").unwrap();
+    bitmap.save_as("./为.bmp").unwrap();
 
     Ok(())
 }
