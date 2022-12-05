@@ -52,7 +52,7 @@ impl Font {
         let units = f.units_per_em() as f32;
         let factor = font_size / units;
         let (glyph, outline) = self.outline(c)?;
-        println!("{:?}", outline);
+        println!("fill path:\n{:?}", outline);
         let advanced_x = glyph.advanced_x as f32 * factor;
         let mut width =
             (glyph.bbox.x_max as f32 * factor).ceil() - (glyph.bbox.x_min as f32 * factor).floor();
@@ -80,6 +80,7 @@ impl Font {
             );
             filler.offset();
             let outline = filler.into_outline();
+            println!("stroke path:\n{:?}", outline);
             let bounds = outline.bounds();
             let width = (bounds.max_x() * factor).ceil() - (bounds.min_x() * factor).floor();
             let height = (bounds.max_y() * factor).ceil() - (bounds.min_y() * factor).floor();

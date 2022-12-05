@@ -30,18 +30,23 @@ pub fn test_font_stroke_bitmap() -> Result<(), Error> {
     let (stroke_bitmap, width) = glyph_bitmap.stroke_bitmap.unwrap();
     let height = (stroke_bitmap.len() / width as usize) as u32;
 
-    let mut bitmap = vec![];
+    let mut bitmap = vec![Rgba::white(); stroke_bitmap.len()];
 
     stroke_bitmap.into_iter().for_each(|alpha| {
-        if alpha == 0 {
-            bitmap.push(Rgba::white())
-        } else {
-            bitmap.push(Rgba::black())
+        if alpha != 0{
+           bitmap.push(Rgba::black())
         }
     });
 
+    // for h in height..0 {
+    //     for w in 0..width {
+    //         let px = Rgba::bgra(0, 0, 0, stroke_bitmap[(height - h) * width + w] / 255 * 100);
+    //         bitmap[h * width + w] = px;
+    //     }
+    // }
+
     let bitmap = BitMap::create(width, height, bitmap).unwrap();
-    bitmap.save_as("./为.bmp").unwrap();
+    bitmap.save_as(format!("./{}.bmp", c).as_str()).unwrap();
 
     Ok(())
 }
