@@ -16,12 +16,12 @@ pub fn test_font_loading() -> Result<(), Error> {
 
 #[test]
 pub fn test_font_stroke_bitmap() -> Result<(), Error> {
-    let c = '为';
+    let c = 'A';
     let mut buf = vec![];
-    let mut f = fs::File::open("examples/Alibaba-PuHuiTi-Bold.woff2")?;
+    let mut f = fs::File::open("examples/仓耳雷震汉风体.woff")?;
     f.read_to_end(&mut buf)?;
 
-    let mut fontkit = fontkit::FontKit::new();
+    let fontkit = fontkit::FontKit::new();
     let font_keys = fontkit.add_font_from_buffer(buf)?;
     let font_key = font_keys[0].borrow();
     let font = fontkit.query(font_key).unwrap();
@@ -30,23 +30,20 @@ pub fn test_font_stroke_bitmap() -> Result<(), Error> {
     let (stroke_bitmap, width) = glyph_bitmap.stroke_bitmap.unwrap();
     let height = (stroke_bitmap.len() / width as usize) as u32;
 
-    let mut bitmap = vec![Rgba::white(); stroke_bitmap.len()];
+    let mut bitmap = vec![];
 
     stroke_bitmap.into_iter().for_each(|alpha| {
-        if alpha != 0{
-           bitmap.push(Rgba::black())
+        if alpha != 0 {
+            bitmap.push(Rgba::rgba(0, 0, 0, alpha))
+        } else {
+            bitmap.push(Rgba::white())
         }
     });
 
-    // for h in height..0 {
-    //     for w in 0..width {
-    //         let px = Rgba::bgra(0, 0, 0, stroke_bitmap[(height - h) * width + w] / 255 * 100);
-    //         bitmap[h * width + w] = px;
-    //     }
-    // }
-
     let bitmap = BitMap::create(width, height, bitmap).unwrap();
-    bitmap.save_as(format!("./{}.bmp", c).as_str()).unwrap();
+    bitmap
+        .save_as(format!("./{}-{}-{}.bmp", c, font_key.family(), font_key.weight()).as_str())
+        .unwrap();
 
     Ok(())
 }
